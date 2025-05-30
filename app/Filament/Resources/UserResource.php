@@ -9,6 +9,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -48,7 +49,14 @@ class UserResource extends Resource
                     ->required(fn (string $operation): bool => $operation === 'create'),
                 DateTimePicker::make('email_verified_at')
                     ->label('Email Verified At')
-                    ->nullable()
+                    ->nullable(),
+                Select::make('role_user_id')
+                    ->relationship('roleUser', 'name_role') // 'role' adalah nama relasi di model User, 'name' adalah kolom yang ditampilkan
+                    ->label('Peran Pengguna')
+                    ->searchable()
+                    ->preload() // Memuat semua opsi saat form dibuka
+                    ->required()
+                    ->placeholder('Pilih Peran')
             ]);
     }
 
@@ -57,6 +65,9 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->searchable()->sortable(),
+                TextColumn::make('roleUser.name_role')
+                    ->label('Role')
+                    ->sortable(),
                 TextColumn::make('email')->searchable()->sortable()
             ])
             ->filters([

@@ -4,21 +4,31 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use App\Models\TransaksiPemasukan;
+use App\Models\TransaksiPengeluaran;
 
 class StatsOverview extends BaseWidget
 {
     protected function getStats(): array
     {
+        $totalPemasukan = TransaksiPemasukan::sum('jumlah');
+        $totalPengeluaran = TransaksiPengeluaran::sum('jumlah');
+        $saldo = $totalPemasukan - $totalPengeluaran;
         return [
-            Stat::make('Saldo', 'Rp 10.500.000,00')
-                ->description('total saldo')
-                ->descriptionIcon('heroicon-m-arrow-trending-up'),
-            Stat::make('Pengeluaran', '21%')
-                ->description('7% decrease')
-                ->descriptionIcon('heroicon-m-arrow-trending-down'),
-            Stat::make('Pemasukan', '79%')
-                ->description('3% increase')
-                ->descriptionIcon('heroicon-m-arrow-trending-up'),
+            Stat::make('Saldo Saat Ini', 'Rp ' . number_format($saldo, 0, ',', '.'))
+                ->description('Total uang yang tersedia')
+                ->descriptionIcon('heroicon-o-currency-dollar')
+                ->color($saldo >= 0 ? 'success' : 'danger'), // Warna hijau jika positif, merah jika negatif
+
+            Stat::make('Total Pemasukan', 'Rp ' . number_format($totalPemasukan, 0, ',', '.'))
+                ->description('Total uang masuk')
+                ->descriptionIcon('heroicon-o-arrow-trending-up')
+                ->color('success'),
+
+            Stat::make('Total Pengeluaran', 'Rp ' . number_format($totalPengeluaran, 0, ',', '.'))
+                ->description('Total uang keluar')
+                ->descriptionIcon('heroicon-o-arrow-trending-down')
+                ->color('danger'),
         ];
     }
 }

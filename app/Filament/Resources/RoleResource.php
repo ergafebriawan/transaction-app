@@ -20,6 +20,7 @@ class RoleResource extends Resource
     protected static ?string $model = RoleUser::class;
 
     protected static ?string $navigationGroup = 'Master';
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Exports;
+namespace App\ExcelExports;
 
-use App\Models\TransaksiPemasukan;
+use App\Models\TransaksiPengeluaran;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings; // Import WithHeadings
 use Maatwebsite\Excel\Concerns\WithMapping; // Import WithMapping
 
-class TransaksiMasukExport implements FromCollection, WithHeadings, WithMapping
+class TransaksiKeluarExcelExport implements FromCollection, WithHeadings, WithMapping
 {
     protected $filters;
 
@@ -21,7 +21,7 @@ class TransaksiMasukExport implements FromCollection, WithHeadings, WithMapping
     */
     public function collection()
     {
-        $query = TransaksiPemasukan::query()->with(['user', 'masterPemasukan']);
+        $query = TransaksiPengeluaran::query()->with(['user', 'masterPengeluaran']);
 
         // Terapkan filter yang sama dengan yang ada di tabel Filament
         if (!empty($this->filters['tanggal']['from_date'])) {
@@ -30,8 +30,8 @@ class TransaksiMasukExport implements FromCollection, WithHeadings, WithMapping
         if (!empty($this->filters['tanggal']['to_date'])) {
             $query->whereDate('tanggal_transaksi', '<=', $this->filters['tanggal']['to_date']);
         }
-        if (!empty($this->filters['master_pemasukan_id'])) {
-            $query->where('master_pemasukan_id', $this->filters['master_pemasukan_id']);
+        if (!empty($this->filters['master_pengeluaran_id'])) {
+            $query->where('master_pengeluaran_id', $this->filters['master_pengeluaran_id']);
         }
 
         return $query->get();
@@ -45,7 +45,7 @@ class TransaksiMasukExport implements FromCollection, WithHeadings, WithMapping
         return [
             'Tanggal Transaksi',
             'Dibuat Oleh',
-            'Jenis Pemasukan',
+            'Jenis Pengeluaran',
             'Jumlah',
             'Catatan',
             'Dibuat Pada',
@@ -56,16 +56,16 @@ class TransaksiMasukExport implements FromCollection, WithHeadings, WithMapping
     /**
      * @var TransaksiMasuk $transaksiMasuk
      */
-    public function map($transaksiMasuk): array
+    public function map($transaksiKeluar): array
     {
         return [
-            $transaksiMasuk->tanggal_transaksi,
-            $transaksiMasuk->user->name ?? '-', // Ambil nama user, atau '-' jika null
-            $transaksiMasuk->masterPemasukan->nama_pemasukan ?? '-', // Ambil jenis pemasukan
-            $transaksiMasuk->jumlah,
-            $transaksiMasuk->catatan,
-            $transaksiMasuk->created_at,
-            $transaksiMasuk->updated_at,
+            $transaksiKeluar->tanggal_transaksi,
+            $transaksiKeluar->user->name ?? '-',
+            $transaksiKeluar->masterPengeluaran->nama_pengeluaran ?? '-',
+            $transaksiKeluar->jumlah,
+            $transaksiKeluar->catatan,
+            $transaksiKeluar->created_at,
+            $transaksiKeluar->updated_at,
         ];
     }
 }

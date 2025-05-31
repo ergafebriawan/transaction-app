@@ -26,7 +26,7 @@ class TransaksiPemasukanResource extends Resource
     protected static ?string $model = TransaksiPemasukan::class;
 
     protected static ?string $navigationGroup = 'Transaksi';
-
+    protected static ?int $navigationSort = 1;
     protected static ?string $navigationLabel = 'Transaksi Pemasukan';
     protected static ?string $title = 'Transaksi Pemasukan';
 

@@ -20,6 +20,7 @@ class MasterPengeluaranResource extends Resource
     protected static ?string $model = MasterPengeluaran::class;
 
     protected static ?string $navigationGroup = 'Master';
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationIcon = 'heroicon-s-arrow-trending-up';
 

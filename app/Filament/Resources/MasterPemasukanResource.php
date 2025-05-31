@@ -20,6 +20,7 @@ class MasterPemasukanResource extends Resource
     protected static ?string $model = MasterPemasukan::class;
 
     protected static ?string $navigationGroup = 'Master';
+    protected static ?int $navigationSort = 3;
 
     protected static ?string $navigationLabel = 'Master Pemasukan';
 
